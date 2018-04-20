@@ -61,9 +61,9 @@ exports.handler = function(input, context, callback) {
 
           const event = JSON.parse(logEvent.message);
 
-          const hash = [event.eventTime, event.eventName, event.awsRegion, event.eventSource];
+          const hash = [event.eventTime, event.eventName, event.awsRegion, event.eventSource, event.userIdentity['arn']];
 
-          // Filling any undefined values to prevent errors on "PutMetricData" call.
+          // Fill any undefined values to prevent errors on "PutMetricData" call.
 
           for (index in hash) {
             if (! hash[index]) {hash[index] = '-'}
@@ -81,6 +81,9 @@ exports.handler = function(input, context, callback) {
               },{
                 Name: 'eventSource',
                 Value: hash[3]
+              },{
+                Name: 'arn',
+                Value: hash[4]
               }],
               Value: 1
             };
